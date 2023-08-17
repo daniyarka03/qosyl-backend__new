@@ -1,0 +1,7 @@
+# Ignore .idea folder created by JetBrains IDEs
+.idea/
+
+# Ignore config.py file
+auth_app/config.py
+
+dist/
