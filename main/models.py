@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.utils.translation import gettext_lazy as _
+import uuid
+
 
 # Create your models here.
 
@@ -36,3 +38,30 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+
+
+class Post(models.Model):
+    post_id = models.CharField(primary_key=True, max_length=20, unique=True)
+    content = models.TextField()
+    author = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
+
+    def save(self, *args, **kwargs):
+        self.post_id = str(uuid.uuid4())[:10]  # Use a portion of the UUID
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.author
+
+
+class Project(models.Model):
+    project_id = models.CharField(primary_key=True, max_length=20, unique=True)
+    title = models.CharField(max_length=100)
+    content = models.TextField()
+
+    def save(self, *args, **kwargs):
+        if not self.project_id:
+            self.project_id = str(uuid.uuid4())[:10]  # Use a portion of the UUID
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.title
