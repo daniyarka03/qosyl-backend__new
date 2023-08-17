@@ -14,3 +14,7 @@ $ pip install -U djangorestframework_simplejwt
 CORSHEADERS
 ```bash
 $ pip install django-cors-headers
+```
+UUID
+```bash
+$ pip install uuid
