@@ -1,20 +1,17 @@
 ## REQUIREMENTS 
 REST_API
 ```bash
-$ pip install djangorestframework
-```
-DJOSER
-```bash
-$ pip install -U djoser
+pip install djangorestframework
 ```
 SIMPLE JWT
 ```bash
-$ pip install -U djangorestframework_simplejwt
+pip install djangorestframework-simplejwt
 ```
 CORSHEADERS
 ```bash
-$ pip install django-cors-headers
+pip install django-cors-headers
 ```
 UUID
 ```bash
-$ pip install uuid
+pip install uuid
+```

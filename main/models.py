@@ -20,6 +20,15 @@ class UserAccountManager(BaseUserManager):
 
         return user
 
+    def create_superuser(self, email, name, password=None):
+        user = self.create_user(email, name, password)
+
+        user.is_superuser = True
+        user.is_staff = True
+        user.save()
+
+        return user
+
 
 class UserAccount(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=255, unique=True)
@@ -54,7 +63,7 @@ class Post(models.Model):
 
 
 class Project(models.Model):
-    project_id = models.CharField(primary_key=True, max_length=20, unique=True)
+    project_id = models.CharField(primary_key=True, max_length=50, unique=True)
     title = models.CharField(max_length=100)
     content = models.TextField()
 

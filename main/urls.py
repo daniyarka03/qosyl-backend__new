@@ -2,9 +2,11 @@
 from django.urls import path
 from . import views
 
+
 # Creating routes urls
 urlpatterns = [
     path('', views.getRoutes, name="routes"),
+    path('users/login/', views.MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('posts/', views.getPosts, name="posts"),
     path('posts/create/', views.addPost, name="add-post"),
     path('projects/', views.getProjects, name="projects"),

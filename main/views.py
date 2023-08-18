@@ -8,6 +8,32 @@ from .models import Post
 from .models import Project
 from .serializers import ProjectSerializer, PostSerializer
 
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
+
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    def validate(self, attrs):
+        data = super().validate(attrs)
+
+        data['email'] = self.user.email
+        data['name'] = self.user.name
+
+        return data
+    # @classmethod
+    # def get_token(cls, user):
+    #     token = super().get_token(user)
+    #
+    #     # Add custom claims
+    #     token['email'] = user.email
+    #     token['message'] = 'Hello world'
+    #     # ...
+    #
+    #     return token
+
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
+
 def get_user_data(request):
     jwt_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjkyMjkwNDIwLCJpYXQiOjE2OTIyOTAxMjAsImp0aSI6ImMzMTI4M2ZjOTViYzRiMDlhOGU1ZTVmOTUyOTkxNjY2IiwidXNlcl9pZCI6OH0.V-ydE8l3jRYtnqaDa1dY9W8MnLShG9BhVUmVD7HL4vc"
     headers = {
@@ -21,6 +47,8 @@ def get_user_data(request):
         return JsonResponse(user_data)
     else:
         return JsonResponse({'error': 'Failed to retrieve user data'}, status=response.status_code)
+
+
 @api_view(['GET'])
 def getRoutes(request):
     routes = [
@@ -55,6 +83,7 @@ def getPosts(request):
     serializer = PostSerializer(posts, many=True)
     return Response(serializer.data)
 
+
 @api_view(['POST', 'GET'])
 def addPost(request):
     post = PostSerializer(data=request.data)
@@ -68,14 +97,13 @@ def addPost(request):
     else:
         return Response(post.errors)
 
+
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def getProjects(request):
     projects = Project.objects.all()
     serializer = ProjectSerializer(projects, many=True)
     return Response(serializer.data)
-
-
 
 
 def example_view(request):
