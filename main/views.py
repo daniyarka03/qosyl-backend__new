@@ -1,23 +1,28 @@
+from django.contrib.auth.hashers import make_password
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
+from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 import requests
 from .models import Post
 from .models import Project
-from .serializers import ProjectSerializer, PostSerializer
+from .models import UserAccount
+from .serializers import ProjectSerializer, PostSerializer, MyUserCreateSerializer, User, UserSerializerWithToken
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
-
+from rest_framework import status
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
         data = super().validate(attrs)
 
-        data['email'] = self.user.email
-        data['name'] = self.user.name
+        serializer = UserSerializerWithToken(self.user).data
+
+        for k, v in serializer.items():
+            data[k] = v
 
         return data
     # @classmethod
@@ -34,47 +39,40 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
-def get_user_data(request):
-    jwt_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjkyMjkwNDIwLCJpYXQiOjE2OTIyOTAxMjAsImp0aSI6ImMzMTI4M2ZjOTViYzRiMDlhOGU1ZTVmOTUyOTkxNjY2IiwidXNlcl9pZCI6OH0.V-ydE8l3jRYtnqaDa1dY9W8MnLShG9BhVUmVD7HL4vc"
-    headers = {
-        'Authorization': f'JWT {jwt_token}',
-    }
 
-    response = requests.get('http://localhost:8000/auth/users/me/', headers=headers)
+@api_view(['POST'])
+def registerUser(request):
+    data = request.data
 
-    if response.status_code == 200:
-        user_data = response.json()
-        return JsonResponse(user_data)
-    else:
-        return JsonResponse({'error': 'Failed to retrieve user data'}, status=response.status_code)
+    try:
+        user = UserAccount.objects.create(
+            name=data['name'],
+            email=data['email'],
+            password=make_password(data['password']),
+            token=data['token']
+        )
 
+
+        serializer = MyUserCreateSerializer(user, many=False)
+        return Response(serializer.data)  # Return the serialized data using .data
+    except:
+        message = {'detail': 'User with this email already exists'}
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
-def getRoutes(request):
-    routes = [
-        '/api/users/',
-        '/api/users/create/',
-        '/api/users/<update>/<id>/',
-        '/api/users/delete/<id>/',
+@permission_classes([IsAuthenticated])
+def getUserProfile(request):
+    if request.user.is_authenticated:
+        serializer = MyUserCreateSerializer(request.user, many=False)
+        return Response(serializer.data)
+    else:
+        return Response({'message': 'User not authenticated'}, status=status.HTTP_401_UNAUTHORIZED)
 
-        '/api/projects/',
-        '/api/projects/create/',
-        '/api/projects/<update>/<id>/',
-        '/api/projects/delete/<id>/',
-
-        '/api/jobs/',
-        '/api/jobs/create/',
-        '/api/jobs/<update>/<id>/',
-        '/api/jobs/delete/<id>/',
-
-        '/api/posts/',
-        '/api/posts/create/',
-        '/api/posts/<update>/<id>/',
-        '/api/posts/delete/<post_id>/',
-    ]
-
-    return Response(routes)
-
+@api_view(['GET'])
+def getUsers(request):
+    users = UserAccount.objects.all()
+    serializer = MyUserCreateSerializer(users, many=True)
+    return Response(serializer.data)
 
 @api_view(['GET'])
 def getPosts(request):
@@ -106,9 +104,7 @@ def getProjects(request):
     return Response(serializer.data)
 
 
-def example_view(request):
-    default_message = 'Hello World'
-    return HttpResponse(default_message)
+
 
 #
 

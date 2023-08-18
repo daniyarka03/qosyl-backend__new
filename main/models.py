@@ -36,6 +36,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=True)
     date_joined = models.DateTimeField(_("date joined"), auto_now_add=True)
+    token = models.CharField(max_length=255, blank=True, null=True)
 
     objects = UserAccountManager()
 
