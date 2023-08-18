@@ -4,7 +4,10 @@ from django.contrib import admin
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('main.urls')),
+    #path('api/', include('main.urls')),
+    path('api/users/', include('main.urls.user_urls')),
+    path('api/projects/', include('main.urls.project_urls')),
+    path('api/posts/', include('main.urls.post_urls')),
     #path('auth/', include('djoser.urls')),
     #path('auth/', include('djoser.urls.jwt')),
 ]
