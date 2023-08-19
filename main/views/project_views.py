@@ -20,6 +20,13 @@ def getProjects(request):
     return Response(serializer.data)
 
 
+@api_view(['GET'])
+def getProject(request, pk):
+    project = Project.objects.get(project_id=pk)
+    serializer = ProjectSerializer(project, many=False)
+    return Response(serializer.data)
+
+
 @api_view(['POST'])
 def createProject(request):
     data = request.data
@@ -30,5 +37,29 @@ def createProject(request):
         type=data['type'],
         contact=data['contact']
     )
+    serializer = ProjectSerializer(project, many=False)
+    return Response(serializer.data)
+
+
+@api_view(['DELETE'])
+def deleteProject(request, pk):
+    project = Project.objects.get(project_id=pk)
+    project.delete()
+    return Response('Project was deleted')
+
+
+@api_view(['PUT'])
+def updateProject(request, pk):
+    data = request.data
+    project = Project.objects.get(project_id=pk)
+
+    project.title = data['title']
+    project.description = data['description']
+    project.image_src = data['image_src']
+    project.type = data['type']
+    project.contact = data['contact']
+
+    project.save()
+
     serializer = ProjectSerializer(project, many=False)
     return Response(serializer.data)
