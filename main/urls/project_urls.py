@@ -6,6 +6,7 @@ from main.views import project_views as views
 # Creating routes urls
 urlpatterns = [
     path('', views.getProjects, name="projects"),
+    path('create/', views.createProject, name="add-project"),
 
     # path('posts/delete/<int:pk>', views.deletePost, name="delete-post"),
     # path('posts/update/<int:pk>', views.updatePost, name="update-post"),

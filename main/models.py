@@ -66,11 +66,14 @@ class Post(models.Model):
 class Project(models.Model):
     project_id = models.CharField(primary_key=True, max_length=50, unique=True)
     title = models.CharField(max_length=100)
-    content = models.TextField()
+    description = models.TextField()
+    type = models.CharField(max_length=100, blank=True, null=True)
+    image_src = models.CharField(max_length=100, blank=True, null=True)
+    contact = models.CharField(max_length=100, blank=True, null=True)
 
     def save(self, *args, **kwargs):
         if not self.project_id:
-            self.project_id = str(uuid.uuid4())[:10]  # Use a portion of the UUID
+            self.project_id = str(uuid.uuid4())[:40]  # Use a portion of the UUID
         super().save(*args, **kwargs)
 
     def __str__(self):

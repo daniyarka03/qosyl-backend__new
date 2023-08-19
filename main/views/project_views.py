@@ -9,12 +9,26 @@ import requests
 from main.models import Project
 from main.serializers import ProjectSerializer
 
-
 from rest_framework import status
+
 
 @api_view(['GET'])
 # @permission_classes([IsAuthenticated])
 def getProjects(request):
     projects = Project.objects.all()
     serializer = ProjectSerializer(projects, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['POST'])
+def createProject(request):
+    data = request.data
+    project = Project.objects.create(
+        title=data['title'],
+        description=data['description'],
+        image_src=data['image_src'],
+        type=data['type'],
+        contact=data['contact']
+    )
+    serializer = ProjectSerializer(project, many=False)
     return Response(serializer.data)
