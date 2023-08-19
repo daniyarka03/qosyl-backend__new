@@ -25,9 +25,6 @@ def getPosts(request):
 def addPost(request):
     post = PostSerializer(data=request.data)
 
-    # if Post.objects.filter(user_id=request.data['post_id']).exists():
-    #     return Response({'message': 'User already exists'})
-
     if post.is_valid():
         post.save()
         return Response(post.data)
