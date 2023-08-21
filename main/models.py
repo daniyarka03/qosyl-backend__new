@@ -37,7 +37,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=True)
     date_joined = models.DateTimeField(_("date joined"), auto_now_add=True)
     token = models.CharField(max_length=255, blank=True, null=True)
-    user_id = models.UUIDField(default=uuid.uuid4,  editable=False)
+    user_id = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
     objects = UserAccountManager()
 
     USERNAME_FIELD = 'email'
@@ -60,14 +60,15 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
 class Post(models.Model):
     post_id = models.CharField(primary_key=True, max_length=100, unique=True, blank=True)
     content = models.TextField()
-    author = models.CharField(max_length=100)
+    author_name = models.CharField(max_length=100, blank=True, null=True)
+    author_id = models.CharField(max_length=100, blank=True, null=True)
 
     def save(self, *args, **kwargs):
         self.post_id = str(uuid.uuid4())[:40]  # Use a portion of the UUID
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return self.author
+        return self.author_name
 
 
 class Project(models.Model):
@@ -77,6 +78,7 @@ class Project(models.Model):
     type = models.CharField(max_length=100, blank=True, null=True)
     image_src = models.CharField(max_length=100, blank=True, null=True)
     contact = models.CharField(max_length=100, blank=True, null=True)
+    author_id = models.CharField(max_length=100, blank=True, null=True)
 
     def save(self, *args, **kwargs):
         if not self.project_id:
