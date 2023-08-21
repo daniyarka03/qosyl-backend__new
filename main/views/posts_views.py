@@ -60,6 +60,6 @@ def updatePost(request, pk):
 
 @api_view(['GET'])
 def getPost(request, pk):
-    post = Post.objects.get(project_id=pk)
+    post = Post.objects.get(post_id=pk)
     serializer = PostSerializer(post, many=False)
     return Response(serializer.data)
