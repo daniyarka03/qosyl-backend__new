@@ -9,7 +9,7 @@ User = get_user_model()
 class MyUserCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'email', 'name', 'last_login', 'is_superuser', 'is_staff', 'is_active', 'date_joined']
+        fields = ['id', 'user_id', 'email', 'name', 'last_login', 'is_superuser', 'is_staff', 'is_active', 'date_joined']
 
 class UserSerializerWithToken(MyUserCreateSerializer):
     token = serializers.SerializerMethodField()  # Define the token field

@@ -37,11 +37,18 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=True)
     date_joined = models.DateTimeField(_("date joined"), auto_now_add=True)
     token = models.CharField(max_length=255, blank=True, null=True)
-
+    user_id = models.UUIDField(default=uuid.uuid4,  editable=False)
     objects = UserAccountManager()
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['name']
+
+    def save(self, *args, **kwargs):
+        if not self.user_id:
+            self.user_id = uuid.uuid4()
+            while UserAccount.objects.filter(user_id=self.user_id).exists():
+                self.user_id = uuid.uuid4()
+        super().save(*args, **kwargs)
 
     def get_name(self):
         return self.name
