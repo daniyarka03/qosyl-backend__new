@@ -40,7 +40,7 @@ def registerUser(request):
         user = UserAccount.objects.create(
             name=data['name'],
             email=data['email'],
-            password=make_password(data['password'])
+            password=make_password(data['password']),
         )
 
         refresh = RefreshToken.for_user(user)

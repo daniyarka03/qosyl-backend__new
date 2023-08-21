@@ -31,7 +31,6 @@ def addPost(request):
     else:
         return Response(post.errors)
 
-
 #
 
 #

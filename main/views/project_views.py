@@ -35,7 +35,8 @@ def createProject(request):
         description=data['description'],
         image_src=data['image_src'],
         type=data['type'],
-        contact=data['contact']
+        contact=data['contact'],
+        author_id=data['author_id']
     )
     serializer = ProjectSerializer(project, many=False)
     return Response(serializer.data)
@@ -58,7 +59,7 @@ def updateProject(request, pk):
     project.image_src = data['image_src']
     project.type = data['type']
     project.contact = data['contact']
-
+    project.author_id = data['author_id']
     project.save()
 
     serializer = ProjectSerializer(project, many=False)
