@@ -53,7 +53,7 @@ def deleteProject(request, pk):
 def updateProject(request, pk):
     data = request.data
     project = Project.objects.get(project_id=pk)
-
+    print("PROJECT:", project)
     project.title = data['title']
     project.description = data['description']
     project.image_src = data['image_src']

@@ -58,13 +58,14 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
 
 
 class Post(models.Model):
-    post_id = models.CharField(primary_key=True, max_length=100, unique=True, blank=True)
+    post_id = models.CharField(primary_key=True, max_length=100, unique=True)
     content = models.TextField()
     author_name = models.CharField(max_length=100, blank=True, null=True)
     author_id = models.CharField(max_length=100, blank=True, null=True)
 
     def save(self, *args, **kwargs):
-        self.post_id = str(uuid.uuid4())[:40]  # Use a portion of the UUID
+        if not self.post_id:
+            self.post_id = str(uuid.uuid4())[:40]  # Use a portion of the UUID
         super().save(*args, **kwargs)
 
     def __str__(self):

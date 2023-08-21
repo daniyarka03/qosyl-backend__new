@@ -13,6 +13,7 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework import status
 
+
 @api_view(['GET'])
 def getPosts(request):
     # return HttpResponse('Hello')
@@ -32,40 +33,33 @@ def addPost(request):
     serializer = PostSerializer(project, many=False)
     return Response(serializer.data)
 
-#
 
-#
-#
-# @api_view(['DELETE', 'GET'])
-# def deletePost(request, pk):
-#     post = Post.objects.get(post_id=pk)
-#     post.delete()
-#     return Response('Post was deleted')
-#
-# @api_view(['PUT', 'GET'])
-# def updatePost(request, pk):
-#     post = Post.objects.get(post_id=pk)
-#     serializer = PostSerializer(instance=post, data=request.data)
-#
-#     if serializer.is_valid():
-#         serializer.save()
-#         return Response(serializer.data)
-#     else:
-#         return Response(serializer.errors)
-# # @api_view(['GET'])
-# # def getProjects(request):
-# #     return Response(projects)
-# #
-# # @api_view(['GET'])
-# # def getProducts(request):
-# #     return Response(products)
-#
-#
-# # @api_view(['GET'])
-# # def getProduct(request, pk):
-# #     product = None
-# #     for i in products:
-# #         if i['_id'] == pk:
-# #             product = i
-# #             break
-# #     return Response(product)
+@api_view(['DELETE', 'GET'])
+def deletePost(request, pk):
+    post = Post.objects.get(post_id=pk)
+    post.delete()
+    return Response('Post was deleted')
+
+
+@api_view(['PUT'])
+def updatePost(request, pk):
+    data = request.data
+    try:
+        post = Post.objects.get(post_id=pk)
+    except Post.DoesNotExist:
+        return Response({"detail": "Post not found."}, status=status.HTTP_404_NOT_FOUND)
+
+    post.content = data['content']
+    post.author_name = data['author_name']
+    post.author_id = data['author_id']
+    post.save()
+
+    serializer = PostSerializer(post, many=False)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def getPost(request, pk):
+    post = Post.objects.get(project_id=pk)
+    serializer = PostSerializer(post, many=False)
+    return Response(serializer.data)
