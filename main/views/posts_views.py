@@ -23,13 +23,14 @@ def getPosts(request):
 
 @api_view(['POST', 'GET'])
 def addPost(request):
-    post = PostSerializer(data=request.data)
-
-    if post.is_valid():
-        post.save()
-        return Response(post.data)
-    else:
-        return Response(post.errors)
+    data = request.data
+    project = Post.objects.create(
+        content=data['content'],
+        author_name=data['author_name'],
+        author_id=data['author_id']
+    )
+    serializer = PostSerializer(project, many=False)
+    return Response(serializer.data)
 
 #
 
