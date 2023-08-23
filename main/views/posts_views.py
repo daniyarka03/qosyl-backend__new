@@ -28,7 +28,8 @@ def addPost(request):
     project = Post.objects.create(
         content=data['content'],
         author_name=data['author_name'],
-        author_id=data['author_id']
+        author_id=data['author_id'],
+        likes=data['likes']
     )
     serializer = PostSerializer(project, many=False)
     return Response(serializer.data)
@@ -52,6 +53,7 @@ def updatePost(request, pk):
     post.content = data['content']
     post.author_name = data['author_name']
     post.author_id = data['author_id']
+    post.likes = data['likes']
     post.save()
 
     serializer = PostSerializer(post, many=False)

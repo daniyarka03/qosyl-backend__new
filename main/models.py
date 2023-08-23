@@ -1,3 +1,4 @@
+from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.utils.translation import gettext_lazy as _
@@ -62,6 +63,8 @@ class Post(models.Model):
     content = models.TextField()
     author_name = models.CharField(max_length=100, blank=True, null=True)
     author_id = models.CharField(max_length=100, blank=True, null=True)
+    likes = models.CharField(max_length=1000000, blank=True, null=True)
+
 
     def save(self, *args, **kwargs):
         if not self.post_id:
