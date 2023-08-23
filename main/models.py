@@ -65,7 +65,6 @@ class Post(models.Model):
     author_id = models.CharField(max_length=100, blank=True, null=True)
     likes = models.CharField(max_length=1000000, blank=True, null=True)
 
-
     def save(self, *args, **kwargs):
         if not self.post_id:
             self.post_id = str(uuid.uuid4())[:40]  # Use a portion of the UUID

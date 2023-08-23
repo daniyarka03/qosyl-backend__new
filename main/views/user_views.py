@@ -71,3 +71,17 @@ def getUsers(request):
     users = UserAccount.objects.all()
     serializer = MyUserCreateSerializer(users, many=True)
     return Response(serializer.data)
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def updateUser(request):
+    user = request.user
+    serializer = MyUserCreateSerializer(user, many=False)
+
+    data = request.data
+    user.name = data['name']
+    user.email = data['email']
+    user.password = make_password(data['password'])
+    user.save()
+
+    return Response(serializer.data)
