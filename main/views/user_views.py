@@ -85,3 +85,11 @@ def updateUser(request):
     user.save()
 
     return Response(serializer.data)
+
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def deleteUser(request):
+    user = request.user
+    user.delete()
+    return Response('User was deleted')
