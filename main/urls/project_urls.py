@@ -1,7 +1,8 @@
 
 from django.urls import path
-from main.views import project_views as views
+from rest_framework import routers
 
+from main.views import project_views as views
 
 # Creating routes urls
 urlpatterns = [
@@ -10,6 +11,7 @@ urlpatterns = [
     path('<str:pk>/update/', views.updateProject, name="update-project"),
     path('<str:pk>/', views.getProject, name="delete-project"),
     path('<str:pk>/delete/', views.deleteProject, name="delete-project"),
+    #path('image/', views.ImageViewSet, name="image-project"),
     # path('posts/delete/<int:pk>', views.deletePost, name="delete-post"),
     # path('posts/update/<int:pk>', views.updatePost, name="update-post"),
     #path('products/', views.getProducts, name="products"),

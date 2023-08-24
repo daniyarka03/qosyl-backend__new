@@ -79,10 +79,10 @@ class Project(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField()
     type = models.CharField(max_length=100, blank=True, null=True)
-    image_src = models.CharField(max_length=100, blank=True, null=True)
+    image_src = models.ImageField(upload_to='images/projects', blank=True, null=True)
     contact = models.CharField(max_length=100, blank=True, null=True)
     author_id = models.CharField(max_length=100, blank=True, null=True)
-
+    #project_logo = models.ImageField(upload_to='images/', blank=True, null=True)
     def save(self, *args, **kwargs):
         if not self.project_id:
             self.project_id = str(uuid.uuid4())[:40]  # Use a portion of the UUID
@@ -90,3 +90,4 @@ class Project(models.Model):
 
     def __str__(self):
         return self.title
+

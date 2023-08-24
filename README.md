@@ -15,3 +15,8 @@ UUID
 ```bash
 pip install uuid
 ```
+
+Pillow
+```bash
+pip install Pillow
+```

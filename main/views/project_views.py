@@ -1,7 +1,7 @@
 from django.contrib.auth.hashers import make_password
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
-from rest_framework import status
+from rest_framework import status, viewsets, permissions
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
@@ -36,7 +36,7 @@ def createProject(request):
         image_src=data['image_src'],
         type=data['type'],
         contact=data['contact'],
-        author_id=data['author_id']
+        author_id=data['author_id'],
     )
     serializer = ProjectSerializer(project, many=False)
     return Response(serializer.data)
@@ -63,3 +63,4 @@ def updateProject(request, pk):
 
     serializer = ProjectSerializer(project, many=False)
     return Response(serializer.data)
+
