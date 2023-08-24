@@ -95,3 +95,9 @@ def deleteUser(request):
     user = request.user
     user.delete()
     return Response('User was deleted')
+
+@api_view(['GET'])
+def getUser(request, pk):
+    user = UserAccount.objects.get(user_id=pk)
+    serializer = MyUserCreateSerializer(user, many=False)
+    return Response(serializer.data)
