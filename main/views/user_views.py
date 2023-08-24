@@ -74,7 +74,7 @@ def getUsers(request):
     return Response(serializer.data)
 
 @api_view(['PUT'])
-@permission_classes([IsAuthenticated])
+#@permission_classes([IsAuthenticated])
 def updateUser(request):
     user = request.user
     serializer = MyUserCreateSerializer(user, many=False)
@@ -90,7 +90,7 @@ def updateUser(request):
 
 
 @api_view(['DELETE'])
-@permission_classes([IsAuthenticated])
+#@permission_classes([IsAuthenticated])
 def deleteUser(request):
     user = request.user
     user.delete()
