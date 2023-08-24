@@ -38,6 +38,7 @@ def registerUser(request):
 
     try:
         user = UserAccount.objects.create(
+            avatar=data['avatar'],
             name=data['name'],
             email=data['email'],
             password=make_password(data['password']),
@@ -79,6 +80,7 @@ def updateUser(request):
     serializer = MyUserCreateSerializer(user, many=False)
 
     data = request.data
+    user.avatar = data['avatar']
     user.name = data['name']
     user.email = data['email']
     user.password = make_password(data['password'])
