@@ -51,16 +51,15 @@ def updatePost(request, pk):
     except Post.DoesNotExist:
         return Response({"detail": "Post not found."}, status=status.HTTP_404_NOT_FOUND)
 
-    post.content = data['content']
-    post.author_name = data['author_name']
-    post.author_id = data['author_id']
-    post.likes = data['likes']
-    post.comments = data['comments']
+    post.content = data.get('content', post.content)  # Provide a default value if 'content' is missing
+    post.author_name = data.get('author_name', post.author_name)  # Provide a default value if 'author_name' is missing
+    post.author_id = data.get('author_id', post.author_id)  # Provide a default value if 'author_id' is missing
+    post.likes = data.get('likes', post.likes)  # Provide a default value if 'likes' is missing
+    post.comments = data.get('comments', post.comments)  # Provide a default value if 'comments' is missing
     post.save()
 
     serializer = PostSerializer(post, many=False)
     return Response(serializer.data)
-
 
 @api_view(['GET'])
 def getPost(request, pk):
