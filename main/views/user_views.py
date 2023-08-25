@@ -52,8 +52,8 @@ def registerUser(request):
         response_data['token'] = token  # Include the token in the response
 
         return Response(response_data, status=status.HTTP_201_CREATED)
-    except:
-        message = {'detail': 'User with this email already exists'}
+    except Exception as e:
+        message = e
         return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 

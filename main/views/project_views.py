@@ -37,6 +37,7 @@ def createProject(request):
         type=data['type'],
         contact=data['contact'],
         author_id=data['author_id'],
+        subscribers=data['subscribers'],
     )
     serializer = ProjectSerializer(project, many=False)
     return Response(serializer.data)
@@ -59,6 +60,7 @@ def updateProject(request, pk):
     project.type = data['type']
     project.contact = data['contact']
     project.author_id = data['author_id']
+    project.subscribers = data['subscribers']
     project.save()
 
     serializer = ProjectSerializer(project, many=False)

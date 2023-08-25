@@ -1,9 +1,11 @@
+import os
+
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.utils.translation import gettext_lazy as _
 import uuid
-
+from PIL import Image
 
 # Create your models here.
 
@@ -65,6 +67,7 @@ class Post(models.Model):
     author_name = models.CharField(max_length=100, blank=True, null=True)
     author_id = models.CharField(max_length=100, blank=True, null=True)
     likes = models.CharField(max_length=1000000, blank=True, null=True)
+    comments = models.JSONField(default=list)
 
     def save(self, *args, **kwargs):
         if not self.post_id:
@@ -83,7 +86,7 @@ class Project(models.Model):
     image_src = models.ImageField(upload_to='images/projects', blank=True, null=True)
     contact = models.CharField(max_length=100, blank=True, null=True)
     author_id = models.CharField(max_length=100, blank=True, null=True)
-    #project_logo = models.ImageField(upload_to='images/', blank=True, null=True)
+    subscribers = models.JSONField(default=list)
     def save(self, *args, **kwargs):
         if not self.project_id:
             self.project_id = str(uuid.uuid4())[:40]  # Use a portion of the UUID
@@ -91,4 +94,3 @@ class Project(models.Model):
 
     def __str__(self):
         return self.title
-
