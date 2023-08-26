@@ -1,8 +1,11 @@
+import os
+
+from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.utils.translation import gettext_lazy as _
 import uuid
-
+from PIL import Image
 
 # Create your models here.
 
@@ -20,18 +23,36 @@ class UserAccountManager(BaseUserManager):
 
         return user
 
+    def create_superuser(self, email, name, password=None):
+        user = self.create_user(email, name, password)
+
+        user.is_superuser = True
+        user.is_staff = True
+        user.save()
+
+        return user
+
 
 class UserAccount(AbstractBaseUser, PermissionsMixin):
+    avatar = models.ImageField(upload_to='images/users/avatars/', blank=True, null=True)
     email = models.EmailField(max_length=255, unique=True)
     name = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=True)
     date_joined = models.DateTimeField(_("date joined"), auto_now_add=True)
-
+    token = models.CharField(max_length=255, blank=True, null=True)
+    user_id = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
     objects = UserAccountManager()
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['name']
+
+    def save(self, *args, **kwargs):
+        if not self.user_id:
+            self.user_id = uuid.uuid4()
+            while UserAccount.objects.filter(user_id=self.user_id).exists():
+                self.user_id = uuid.uuid4()
+        super().save(*args, **kwargs)
 
     def get_name(self):
         return self.name
@@ -41,26 +62,34 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
 
 
 class Post(models.Model):
-    post_id = models.CharField(primary_key=True, max_length=20, unique=True)
+    post_id = models.CharField(primary_key=True, max_length=100, unique=True)
     content = models.TextField()
-    author = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
+    author_name = models.CharField(max_length=100, blank=True, null=True)
+    author_id = models.CharField(max_length=100, blank=True, null=True)
+    likes = models.CharField(max_length=1000000, blank=True, null=True)
+    comments = models.JSONField(default=list)
 
     def save(self, *args, **kwargs):
-        self.post_id = str(uuid.uuid4())[:10]  # Use a portion of the UUID
+        if not self.post_id:
+            self.post_id = str(uuid.uuid4())[:40]  # Use a portion of the UUID
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return self.author
+        return self.author_name
 
 
 class Project(models.Model):
-    project_id = models.CharField(primary_key=True, max_length=20, unique=True)
+    project_id = models.CharField(primary_key=True, max_length=50, unique=True)
     title = models.CharField(max_length=100)
-    content = models.TextField()
-
+    description = models.TextField()
+    type = models.CharField(max_length=100, blank=True, null=True)
+    image_src = models.ImageField(upload_to='images/projects', blank=True, null=True)
+    contact = models.CharField(max_length=100, blank=True, null=True)
+    author_id = models.CharField(max_length=100, blank=True, null=True)
+    subscribers = models.JSONField(default=list)
     def save(self, *args, **kwargs):
         if not self.project_id:
-            self.project_id = str(uuid.uuid4())[:10]  # Use a portion of the UUID
+            self.project_id = str(uuid.uuid4())[:40]  # Use a portion of the UUID
         super().save(*args, **kwargs)
 
     def __str__(self):
