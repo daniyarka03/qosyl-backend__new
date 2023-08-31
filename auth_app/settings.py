@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 from datetime import timedelta
 from pathlib import Path
 import os
-from .config import SECRET_KEY
+from .config import SECRET_KEY, API_SECRET_KEY_FOR_SERVER
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -26,7 +26,7 @@ SECRET_KEY = SECRET_KEY
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '109.248.170.181', 'http://localhost:5173', 'https://qosyl.me/']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '109.248.170.181', 'http://localhost:5173', 'https://qosyl.me/', 'https://qosyl.me:8000/', 'qosyl.me:8000', 'qosyl.me']
 
 
 # Application definition
@@ -68,7 +68,7 @@ ROOT_URLCONF = 'auth_app.urls'
 #     'http://localhost:5173',
 # ]
 
-MEDIA_URL = 'media/'
+MEDIA_URL = '/cXQYMmoJTmnj79aRVNDw16rkoGW/media/'
 
 MEDIA_ROOT = BASE_DIR / 'media'
 
