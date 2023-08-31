@@ -20,3 +20,7 @@ Pillow
 ```bash
 pip install Pillow
 ```
+Postgresql
+```bash
+pip install psycopg2
+```
