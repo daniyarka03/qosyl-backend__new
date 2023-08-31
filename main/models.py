@@ -7,6 +7,7 @@ from django.utils.translation import gettext_lazy as _
 import uuid
 from PIL import Image
 
+
 # Create your models here.
 
 
@@ -69,6 +70,8 @@ class Post(models.Model):
     likes = models.CharField(max_length=1000000, blank=True, null=True)
     comments = models.JSONField(default=list)
 
+    # created_at = models.DateTimeField(auto_now_add=True)
+
     def save(self, *args, **kwargs):
         if not self.post_id:
             self.post_id = str(uuid.uuid4())[:40]  # Use a portion of the UUID
@@ -87,9 +90,31 @@ class Project(models.Model):
     contact = models.CharField(max_length=100, blank=True, null=True)
     author_id = models.CharField(max_length=100, blank=True, null=True)
     subscribers = models.JSONField(default=list)
+
+    # created_at = models.DateTimeField(auto_now_add=True)
     def save(self, *args, **kwargs):
         if not self.project_id:
             self.project_id = str(uuid.uuid4())[:40]  # Use a portion of the UUID
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.title
+
+
+class Job(models.Model):
+    job_id = models.CharField(primary_key=True, max_length=50, unique=True)
+    project_id = models.CharField(max_length=100, blank=True, null=True)
+    title = models.CharField(max_length=100)
+    work_format = models.CharField(max_length=100, blank=True, null=True)
+    description = models.TextField()
+    responsibility = models.TextField()
+    requirements = models.TextField()
+    we_offer = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def save(self, *args, **kwargs):
+        if not self.job_id:
+            self.job_id = str(uuid.uuid4())[:40]  # Use a portion of the UUID
         super().save(*args, **kwargs)
 
     def __str__(self):

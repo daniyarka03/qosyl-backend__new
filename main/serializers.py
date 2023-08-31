@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from rest_framework_simplejwt.tokens import RefreshToken
-from main.models import Project, Post
+from main.models import Project, Post, Job
 
 User = get_user_model()
 
@@ -31,5 +31,10 @@ class PostSerializer(serializers.ModelSerializer):
 class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
+        fields = '__all__'
+
+class JobSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Job
         fields = '__all__'
 
