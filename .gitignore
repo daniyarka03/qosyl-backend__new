@@ -7,3 +7,6 @@ auth_app/config.py
 dist/
 
 venv/
+
+media/
+
