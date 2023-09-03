@@ -7,10 +7,11 @@ from .config import API_SECRET_KEY_FOR_SERVER
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-   path(API_SECRET_KEY_FOR_SERVER + 'api/users/', include('main.urls.user_urls')),
+    path(API_SECRET_KEY_FOR_SERVER + 'api/users/', include('main.urls.user_urls')),
     path(API_SECRET_KEY_FOR_SERVER + 'api/projects/', include('main.urls.project_urls')),
     path(API_SECRET_KEY_FOR_SERVER + 'api/posts/', include('main.urls.post_urls')),
     path(API_SECRET_KEY_FOR_SERVER + 'api/jobs/', include('main.urls.job_urls')),
+    path(API_SECRET_KEY_FOR_SERVER + 'api/students_clubs/', include('main.urls.students-club_urls')),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

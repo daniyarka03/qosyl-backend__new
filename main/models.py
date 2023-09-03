@@ -119,3 +119,21 @@ class Job(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class StudentsClub(models.Model):
+    students_club_id = models.CharField(primary_key=True, max_length=50, unique=True)
+    title = models.CharField(max_length=100)
+    related_by_uni = models.JSONField(default=list)
+    description = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    members = models.JSONField(default=list)
+    author_id = models.CharField(max_length=100, blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        if not self.students_club_id:
+            self.students_club_id = str(uuid.uuid4())[:40]  # Use a portion of the UUID
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.title
