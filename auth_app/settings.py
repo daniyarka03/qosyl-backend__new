@@ -13,6 +13,7 @@ from datetime import timedelta
 from pathlib import Path
 import os
 from .config import SECRET_KEY, API_SECRET_KEY_FOR_SERVER
+import pytz
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -131,7 +132,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'UTC+6'
 
 USE_I18N = True
 

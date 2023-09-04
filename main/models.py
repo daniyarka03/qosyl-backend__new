@@ -69,6 +69,7 @@ class Post(models.Model):
     author_name = models.CharField(max_length=100, blank=True, null=True)
     author_id = models.CharField(max_length=100, blank=True, null=True)
     likes = models.CharField(max_length=1000000, blank=True, null=True)
+    created_at = models.DateTimeField(default=timezone.now)
     comments = models.JSONField(default=list)
 
     # created_at = models.DateTimeField(auto_now_add=True)
