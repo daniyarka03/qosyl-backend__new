@@ -22,6 +22,7 @@ def addStudentsClub(request):
         author_id=data['author_id'],
         related_by_uni=data['related_by_uni'],
         members=data['members'],
+        image_src=data['image_src'],
     )
     serializer = StudentsClubSerializer(club, many=False)
     return Response(serializer.data)
@@ -48,6 +49,7 @@ def updateStudentsClub(request, pk):
     club.related_by_uni = data.get('related_by_uni',
                                    club.related_by_uni)  # Provide a default value if 'related_by_uni' is missing
     club.members = data.get('members', club.members)  # Provide a default value if 'members' is missing
+    club.image_src = data.get('image_src', club.image_src)  # Provide a default value if 'image_src' is missing
 
     club.save()
 
