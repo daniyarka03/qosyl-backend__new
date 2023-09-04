@@ -3,6 +3,7 @@ import os
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 import uuid
 from PIL import Image
@@ -90,8 +91,12 @@ class Project(models.Model):
     contact = models.CharField(max_length=100, blank=True, null=True)
     author_id = models.CharField(max_length=100, blank=True, null=True)
     subscribers = models.JSONField(default=list)
+    members = models.JSONField(default=list)
+    created_at = models.DateTimeField(default=timezone.now)
+    dev_stage = models.CharField(max_length=100, blank=True, null=True)
+    status = models.CharField(max_length=100, blank=True, null=True)
 
-    # created_at = models.DateTimeField(auto_now_add=True)
+
     def save(self, *args, **kwargs):
         if not self.project_id:
             self.project_id = str(uuid.uuid4())[:40]  # Use a portion of the UUID
