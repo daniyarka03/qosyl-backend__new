@@ -129,6 +129,7 @@ class StudentsClub(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     members = models.JSONField(default=list)
     author_id = models.CharField(max_length=100, blank=True, null=True)
+    image_src = models.ImageField(upload_to='images/students_club/', blank=True, null=True)
 
     def save(self, *args, **kwargs):
         if not self.students_club_id:
