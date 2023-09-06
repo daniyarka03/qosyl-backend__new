@@ -42,6 +42,9 @@ def registerUser(request):
             name=data['name'],
             email=data['email'],
             password=make_password(data['password']),
+            hobbies=data['hobbies'],
+            speciality=data['speciality'],
+            study_place=data['study_place'],
         )
 
         refresh = RefreshToken.for_user(user)
@@ -84,6 +87,9 @@ def updateUser(request):
     user.name = data['name']
     user.email = data['email']
     user.password = make_password(data['password'])
+    user.hobbies = data['hobbies']
+    user.speciality = data['speciality']
+    user.study_place = data['study_place']
     user.save()
 
     return Response(serializer.data)

@@ -44,6 +44,10 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField(_("date joined"), auto_now_add=True)
     token = models.CharField(max_length=255, blank=True, null=True)
     user_id = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
+    hobbies = models.JSONField(default=list)
+    speciality = models.CharField(max_length=255, default='Student')
+    study_place = models.CharField(max_length=255, blank=True, null=True)
+
     objects = UserAccountManager()
 
     USERNAME_FIELD = 'email'
@@ -136,6 +140,7 @@ class StudentsClub(models.Model):
     members = models.JSONField(default=list)
     author_id = models.CharField(max_length=100, blank=True, null=True)
     image_src = models.ImageField(upload_to='images/students_club/', blank=True, null=True)
+    contact = models.CharField(max_length=100, blank=True, null=True)
 
     def save(self, *args, **kwargs):
         if not self.students_club_id:
