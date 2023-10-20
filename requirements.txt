@@ -7,3 +7,4 @@ psycopg2  # For PostgreSQL support
 uuid
 Pillow
 djangorestframework-simplejwt
+requests
