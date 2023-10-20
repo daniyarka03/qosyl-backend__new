@@ -4,3 +4,6 @@ django-cors-headers
 django-extensions
 django-sslserver
 psycopg2  # For PostgreSQL support
+uuid
+Pillow
+djangorestframework-simplejwt
