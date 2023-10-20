@@ -1,0 +1,10 @@
+{
+  "name": "qosyl-backend__new",
+  "script": "python",
+  "args": ["manage.py", "runsslserver", "--certificate", "/etc/letsencrypt/live/qosyl.me/fullchain.pem", "--key", "/etc/letsencrypt/live/qosyl.me/privkey.pem", "0.0.0.0:8000"],
+  "cwd": "/root/qosyl-backend__new/",
+  "interpreter": "none",
+  "env": {
+    "DJANGO_SETTINGS_MODULE": "auth_app.settings"
+  }
+}
